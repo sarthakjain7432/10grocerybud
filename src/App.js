@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons"; 
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,11 +12,22 @@ function App() {
   const [editMsg,setEditMsg] = useState(false);
   const [clearAllMsg,setClearAllMsg] = useState(false);
 
+  useEffect(()=>{
+    const storedList = JSON.parse(localStorage.getItem("groceryList")) || [];
+     if (storedList.length > 0) {
+      setList(storedList);
+     }
+  },[]);
+
+  useEffect(()=>{
+    localStorage.setItem("groceryList",JSON.stringify(list));
+  },[list]);
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value)
   };
   const handleAddItem = () => {
-    if(button == "Edit"){
+    if(button === "Edit"){
       list[editIndex] = inputValue.trim();
       setList(list);
       setButton("Add item")
